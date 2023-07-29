@@ -11,10 +11,39 @@ export interface Note {
     archived: boolean
 }
 
+export interface IArchivedProps {
+    id: string,    
+    category: string,
+    archivedItems: number,
+    activeItems: number
+}
+
 interface NotesState {
     notes: Note[],
+    archivedList: IArchivedProps[],
     isLoadingNotes: boolean,
     errorNotes: null | {},
+    idToUpdate: null | string
+}
+
+const handleUpdatingArchive = (state: NotesState): IArchivedProps[] => {
+    const currentList: IArchivedProps[] = [];
+
+    state.notes.forEach(({ category, archived }) => {
+        const i = currentList.findIndex(item => item.category === category);
+        if (i !== -1) {
+            archived ? currentList[i].archivedItems += 1 : currentList[i].activeItems += 1;
+        } else {
+            currentList.push({
+                category,
+                activeItems: archived ? 0 : 1,
+                archivedItems: archived ? 1 : 0,
+                id: Math.random().toString()
+            });
+        }            
+    });
+    
+    return currentList;
 }
 
 const initialState: NotesState = {
@@ -83,24 +112,43 @@ const initialState: NotesState = {
             archived: false
         }
     ],
+    archivedList: [],
     isLoadingNotes: false,
     errorNotes: null,
+    idToUpdate: null
 }
     
 const notesSlice = createSlice({
     name: 'notes',
     initialState,
     reducers: {
-        changeNotes: (state, action: PayloadAction<Note[]>) => {
-            state.notes = action.payload;
-        }
+        deleteNote: (state, action: PayloadAction<string>) => {
+            const i = state.notes.findIndex(({ id }) => id === action.payload);
+            state.notes.splice(i, 1);
+            // state.notes = [...state.notes].filter(({ id }) => id !== action.payload);
+        },
+        toggleArchiveNote: (state, action: PayloadAction<string>) => {
+            const i = state.notes.findIndex(({ id }) => id === action.payload);
+            state.notes[i].archived = !state.notes[i].archived;    
+            state.archivedList = handleUpdatingArchive(state);
+        },
+        setIdToUpdate: (state, action: PayloadAction<null | string>) => {
+            state.idToUpdate = action.payload;
+        },
+        updateNotes: (state, action: PayloadAction<Note>) => {
+            const i = state.notes.findIndex(({ id }) => id === action.payload.id);
+            i !== -1 ? state.notes.splice(i, 1, action.payload) : state.notes.push(action.payload);           
+        },
+        updateArchiveList: (state) => {
+            state.archivedList = handleUpdatingArchive(state);         
+        },
   }
 
 });
 
-export const { changeNotes } = notesSlice.actions
+export const { deleteNote, toggleArchiveNote, setIdToUpdate, updateNotes, updateArchiveList } = notesSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectNotes = (state: RootState) => state.notes
+export const selectNotes = (state: RootState) => state.notes;
 
 export default notesSlice.reducer;

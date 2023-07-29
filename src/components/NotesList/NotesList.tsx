@@ -28,7 +28,10 @@ const NotesList: React.FC<IMyProps> = ({ notes, setModalType }: IMyProps) => {
                 </tr>
             </thead>
             <tbody>              
-                {notes.map(note => <NotesItem key={note.id} note={note} setModalType={setModalType} />)}
+                {notes.find(({ archived }) => !archived) ?
+                    notes.filter(({ archived }) => !archived).map(note => <NotesItem key={note.id} note={note} setModalType={setModalType} />) : 
+                    <tr><td>"List is empty..."</td></tr>
+                }
             </tbody>
             
         </NotesListStyled>

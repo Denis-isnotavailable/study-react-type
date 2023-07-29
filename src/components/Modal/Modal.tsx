@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { createPortal } from "react-dom";
 import { AiOutlineClose } from "react-icons/ai";
-import { ModalStyled, ButtonCloseStyled } from "./Modal.styled";
+import { ModalStyled, ButtonCloseStyled, ModalBox } from "./Modal.styled";
 
 interface IProps {
     children?: React.ReactNode,
@@ -18,12 +18,12 @@ export class Modal extends Component<IProps> {
 
         return createPortal(
             <ModalStyled>
-                <div>
+                <ModalBox>
                     <ButtonCloseStyled type="button" onClick={() => this.props.closeModal()}>
                         <AiOutlineClose size={20}/>
                     </ButtonCloseStyled>                    
                     {this.props.children}
-                </div>                
+                </ModalBox>                
             </ModalStyled>,
             modalRoot
         );

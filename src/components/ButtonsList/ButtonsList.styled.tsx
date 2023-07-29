@@ -13,7 +13,8 @@ export const ButtonsListStyled = styled.ul`
 
 export const ButtonStyled = styled.button`
     display: block;
-    margin-left: auto;    
+    margin-left: auto;   
+    padding: 10px 20px;
     background-color: rgb(240, 239, 239);
     border-radius: .3rem;
 

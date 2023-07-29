@@ -1,14 +1,21 @@
-import React from 'react'
-// import { StatisticListStyled } from './StatisticList.styled'
-import { Note } from '../../redux/slice'
+import React, {useEffect} from 'react';
+import { Note, updateArchiveList } from '../../redux/slice'
 import { NotesListStyled } from '../NotesList/NotesList.styled';
 import StatisticItem from '../StatisticItem/StatisticItem';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 
 interface IMyProps {
-    notes: Note[],
+    notes?: Note[],
 }
 
-const StatisticList: React.FC<IMyProps> = ({ notes }: IMyProps) => {
+const StatisticList: React.FC<IMyProps> = () => {
+    const { notes, archivedList } = useAppSelector(state => state.notes);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {    
+        dispatch(updateArchiveList()); 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [notes]);
 
 
     return (
@@ -21,7 +28,7 @@ const StatisticList: React.FC<IMyProps> = ({ notes }: IMyProps) => {
                 </tr>
             </thead>
             <tbody>              
-                {notes.map(note => <StatisticItem key={note.id} note={note} />)}
+                {archivedList.map(note => <StatisticItem key={note.id} note={note} />)}
             </tbody>
         </NotesListStyled>
     )

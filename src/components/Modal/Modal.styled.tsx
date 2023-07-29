@@ -16,8 +16,8 @@ export const ModalStyled = styled.div`
 
 export const ButtonCloseStyled = styled.button`
     position: absolute;
-    top: calc(50% - 150px);
-    right: calc(50% - 154px);
+    top: 4px;
+    right: 4px;
     margin: 0;
     padding: 0;
     display: flex;
@@ -40,4 +40,13 @@ export const ButtonCloseStyled = styled.button`
         background-color: #6b6b71;
         color: #ffffff;
     }
+`;
+
+export const ModalBox = styled.div`
+    position: fixed;
+    width: 70%;
+    min-height: 150px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
 `;

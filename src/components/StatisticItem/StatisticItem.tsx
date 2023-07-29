@@ -1,19 +1,20 @@
-import React from 'react'
-import { Note } from '../../redux/slice'
+import React from 'react';
 import { NotesItemStyled } from '../NotesItem/NotesItem.styled';
+import { IArchivedProps } from '../../redux/slice';
+
 
 interface IMyProps {
-    note: Note,
+    note: IArchivedProps
 }
 
 const StatisticItem: React.FC<IMyProps> = ({ note }: IMyProps) => {
 
-    const { name, category, archived } = note;
+    const { category, archivedItems, activeItems} = note;
     return (
         <NotesItemStyled>
             <td>{category}</td>
-            <td>{archived}</td>
-            <td>{name}</td>          
+            <td>{activeItems}</td>
+            <td>{archivedItems}</td>          
         </NotesItemStyled>
     )
 };
